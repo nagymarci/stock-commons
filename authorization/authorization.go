@@ -151,3 +151,9 @@ func checkScope(scope string, tokenString string, authorizationServer string, au
 
 	return hasScope
 }
+
+func DefaultExtractUserID(r *http.Request) string {
+	user := r.Context().Value("user")
+	email := user.(*jwt.Token).Claims.(jwt.MapClaims)["sub"].(string)
+	return email
+}
