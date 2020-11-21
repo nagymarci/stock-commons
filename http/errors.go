@@ -75,6 +75,26 @@ func (e *notFoundError) Status() int {
 	return e.status
 }
 
+type failedDependencyError struct {
+	err    string
+	status int
+}
+
+func NewFailedDependencyError(msg string) error {
+	return &failedDependencyError{
+		err:    msg,
+		status: http.StatusFailedDependency,
+	}
+}
+
+func (e *failedDependencyError) Error() string {
+	return e.err
+}
+
+func (e *failedDependencyError) Status() int {
+	return e.status
+}
+
 func HandleError(err error, w http.ResponseWriter) {
 	statusCode := http.StatusInternalServerError
 	if err, ok := interface{}(&err).(HttpError); ok {
